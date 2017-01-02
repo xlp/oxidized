@@ -70,6 +70,8 @@ Oxidized is a network device configuration backup tool. It's a RANCID replacemen
    * [NOS (Network Operating System)](lib/oxidized/model/nos.rb)
    * [Vyatta](lib/oxidized/model/vyatta.rb)
    * [6910](lib/oxidized/model/br6910.rb)
+ * Casa
+   * [Casa](lib/oxidized/model/casa.rb)
  * Check Point
    * [GaiaOS](lib/oxidized/model/gaiaos.rb)
  * Ciena
@@ -94,6 +96,8 @@ Oxidized is a network device configuration backup tool. It's a RANCID replacemen
  * DELL
    * [PowerConnect](lib/oxidized/model/powerconnect.rb)
    * [AOSW](lib/oxidized/model/aosw.rb)
+ * D-Link
+   * [D-Link](lib/oxidized/model/dlink.rb)
  * Ericsson/Redback
    * [IPOS (former SEOS)](lib/oxidized/model/ipos.rb)
  * Extreme Networks
@@ -106,9 +110,14 @@ Oxidized is a network device configuration backup tool. It's a RANCID replacemen
    * [FTOS](lib/oxidized/model/ftos.rb)
  * FortiGate
    * [FortiOS](lib/oxidized/model/fortios.rb)
+ * Fujitsu
+   * [PRIMERGY Blade switch 1/10Gbe](lib/oxidized/model/fujitsupy.rb)
+ * Hatteras
+   * [Hatteras](lib/oxidized/model/hatteras.rb)
  * HP
    * [Comware (HP A-series, H3C, 3Com)](lib/oxidized/model/comware.rb)
    * [Procurve](lib/oxidized/model/procurve.rb)
+   * [BladeSystem (Onboard Administrator)](lib/oxidized/model/hpebladesystem.rb)
  * Huawei
    * [VRP](lib/oxidized/model/vrp.rb)
  * Juniper
@@ -122,6 +131,7 @@ Oxidized is a network device configuration backup tool. It's a RANCID replacemen
    * [RFS](lib/oxidized/model/mtrlrfs.rb)
  * MRV
    * [MasterOS](lib/oxidized/model/masteros.rb)
+   * [FiberDriver](lib/oxidized/model/fiberdriver.rb)
  * Netonix
    * [WISP Switch (As Netonix)](lib/oxidized/model/netonix.rb)
  * Nokia (formerly TiMetra, Alcatel, Alcatel-Lucent)
@@ -130,11 +140,14 @@ Oxidized is a network device configuration backup tool. It's a RANCID replacemen
    * [Opengear](lib/oxidized/model/opengear.rb)
  * Palo Alto
    * [PANOS](lib/oxidized/model/panos.rb)
+ * [PLANET SG/SGS Switches](lib/oxidized/model/planet.rb)
  * [pfSense](lib/oxidized/model/pfsense.rb)
  * Quanta
    * [Quanta / VxWorks 6.6 (1.1.0.8)](lib/oxidized/model/quantaos.rb)
  * Supermicro
    * [Supermicro](lib/oxidized/model/supermicro.rb)
+ * Trango Systems
+   * [Trango](lib/oxidized/model/trango.rb)
  * Ubiquiti
    * [AirOS](lib/oxidized/model/airos.rb)
    * [Edgeos](lib/oxidized/model/edgeos.rb)
@@ -294,17 +307,17 @@ this will bind port 8888 to all interfaces then expose port out. (Issue #445)
 
 You can also use docker-compose to launch oxidized container:
 ```
-# docker-compose.yml 
+# docker-compose.yml
 # docker-compose file example for oxidized that will start along with docker daemon
 oxidized:
   restart: always
-  image: oxidized/oxidized:latest 
+  image: oxidized/oxidized:latest
   ports:
     - 8888:8888/tcp
   environment:
     CONFIG_RELOAD_INTERVAL: 600
   volumes:
-    - /etc/oxidized:/root/.config/oxidized 
+    - /etc/oxidized:/root/.config/oxidized
 ```
 
 create the `/etc/oxidized/router.db`
@@ -333,14 +346,18 @@ docker run -v /etc/oxidized:/root/.config/oxidized -p 8888:8888/tcp -e CONFIG_RE
 
 ## Cookbook
 ### Debugging
-In case a model plugin doesn't work correctly (ios, procurve, etc.), you can enable live debugging of SSH/Telnet sessions. Just add a ```debug``` option, specifying a log file destination to the ```input``` section.
+In case a model plugin doesn't work correctly (ios, procurve, etc.), you can enable live debugging of SSH/Telnet sessions. Just add a ```debug``` option containing the value true to the ```input``` section. The log files will be created depending on the parent directory of the logfile option.
 
-The following example will log an active ssh session to ```/home/fisakytt/.config/oxidized/log_input-ssh``` and telnet to ```log_input-telnet```. The file will be truncated on each consecutive ssh/telnet session, so you need to put a ```tailf``` or ```tail -f``` on that file!
+The following example will log an active ssh/telnet session ```/home/oxidized/.config/oxidized/log/<IP-Adress>-<PROTOCOL>```. The file will be truncated on each consecutive ssh/telnet session, so you need to put a ```tailf``` or ```tail -f``` on that file!
 
 ```
+log: /home/oxidized/.config/oxidized/log
+
+...
+
 input:
   default: ssh, telnet
-  debug: /tmp/oxidized_log_input
+  debug: true
   ssh:
     secure: false
 ```
@@ -491,6 +508,17 @@ source:
       enable: enable
     headers:
       X-Auth-Token: 'somerandomstring'
+```
+
+You can also pass `secure: false` if you want to disable ssl certificate verification:
+
+```
+source:
+  default: http
+  http:
+    url: https://url/api
+    scheme: https
+    secure: false
 ```
 
 ### Output: File
@@ -790,6 +818,35 @@ hooks:
     username: user
     password: pass
 ```
+
+## Hook type: awssns
+
+The `awssns` hook publishes messages to AWS SNS topics. This allows you to notify other systems of device configuration changes, for example a config orchestration pipeline. Multiple services can subscribe to the same AWS topic.
+
+Fields sent in the message:
+
+  * `event`: Event type (e.g. `node_success`)
+  * `group`: Group name
+  * `model`: Model name (e.g. `eos`)
+  * `node`: Device hostname
+
+Configuration example:
+
+``` yaml
+hooks:
+  hook_script:
+    type: awssns
+    events: [node_fail,node_success,post_store]
+    region: us-east-1
+    topic_arn: arn:aws:sns:us-east-1:1234567:oxidized-test-backup_events
+```
+
+AWS SNS hook requires the following configuration keys:
+
+  * `region`: AWS Region name
+  * `topic_arn`: ASN Topic reference
+
+Your AWS credentials should be stored in `~/.aws/credentials`.
 
 # Ruby API
 
