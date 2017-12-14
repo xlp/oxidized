@@ -1,8 +1,8 @@
 class Comware < Oxidized::Model
   # HP (A-series)/H3C/3Com Comware
   
-  # sometimes the prompt might have a leading nul
-  prompt /^\0*(<[\w.-]+>)$/
+  # sometimes the prompt might have a leading nul or trailing ASCII Bell (^G)
+  prompt /^\0*(<[\w.-]+>).?$/
   comment '# '
 
   # example how to handle pager
@@ -18,6 +18,12 @@ class Comware < Oxidized::Model
     cfg.each_line.to_a[1..-2].join
   end
  
+  cmd :secret do |cfg|
+    cfg.gsub! /^( snmp-agent community).*/, '\\1 <configuration removed>'
+    cfg.gsub! /^( password hash).*/, '\\1 <configuration removed>'
+    cfg
+  end
+
   cfg :telnet do
     username /^Username:$/
     password /^Password:$/
