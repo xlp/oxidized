@@ -1,31 +1,34 @@
-FROM phusion/baseimage:0.9.18
-MAINTAINER Samer Abdel-Hafez <sam@arahant.net>
+# Single-stage build of an oxidized container from phusion/baseimage-docker v0.11, derived from Ubuntu 18.04 (Bionic Beaver)
+FROM phusion/baseimage:0.11
+LABEL maintainer="Samer Abdel-Hafez <sam@arahant.net>"
 
-RUN add-apt-repository ppa:brightbox/ruby-ng && \
-	apt-get update && \
-  apt-get install -y ruby2.3 ruby2.3-dev libsqlite3-dev libssl-dev pkg-config make cmake libssh2-1-dev git g++
+# set up dependencies for the build process
+RUN apt-get -yq update && \
+    apt-get -yq install ruby2.5 ruby2.5-dev libssl1.1 libssl-dev pkg-config make cmake libssh2-1 libssh2-1-dev git g++ libffi-dev ruby-bundler libicu60 libicu-dev libsqlite3-0 libsqlite3-dev libmysqlclient20 libmysqlclient-dev
 
-RUN mkdir -p /tmp/oxidized
+# dependencies for hooks
+RUN gem install aws-sdk slack-api xmpp4r cisco_spark --no-ri --no-rdoc
+
+# dependencies for sources
+RUN gem install gpgme sequel sqlite3 mysql2 --no-ri --no-rdoc
+
+# build and install oxidized
 COPY . /tmp/oxidized/
 WORKDIR /tmp/oxidized
 
-RUN gem build oxidized.gemspec
-RUN gem install oxidized-*.gem
+# docker automated build gets shallow copy, but non-shallow copy cannot be unshallowed
+RUN git fetch --unshallow || true
+RUN rake install
 
 # web interface
 RUN gem install oxidized-web --no-ri --no-rdoc
 
-# dependencies for hooks
-RUN gem install aws-sdk
-RUN gem install slack-api
-RUN gem install xmpp4r
-
+# clean up
+WORKDIR /
 RUN rm -rf /tmp/oxidized
+RUN apt-get -yq --purge autoremove ruby-dev pkg-config make cmake ruby-bundler libssl-dev libssh2-1-dev libicu-dev libsqlite3-dev libmysqlclient-dev
 
-RUN apt-get remove -y ruby-dev pkg-config make cmake
-
-RUN apt-get -y autoremove
-
+# add runit services
 ADD extra/oxidized.runit /etc/service/oxidized/run
 ADD extra/auto-reload-config.runit /etc/service/auto-reload-config/run
 ADD extra/update-ca-certificates.runit /etc/service/update-ca-certificates/run
