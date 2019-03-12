@@ -10,7 +10,7 @@ oxidized:
     CONFIG_RELOAD_INTERVAL: 600
   volumes:
     - /etc/oxidized:/root/.config/oxidized 
-    - /home/eternalnet/.ssh:/root.ssh
+    - /home/eternalnet/.ssh:/root/.ssh
     - /var/www/CONFIG:/root/edoc
     - /var/lib/oxidized/:/var/lib/oxidized/
 
