@@ -3,6 +3,7 @@
 oxidized:
   restart: always
   image: oxidized/oxidized:latest 
+  #build: ./
   ports:
     - 8888:8888/tcp
   environment:
@@ -10,4 +11,6 @@ oxidized:
   volumes:
     - /etc/oxidized:/root/.config/oxidized 
     - /home/eternalnet/.ssh:/root.ssh
+    - /var/www/CONFIG:/root/edoc
+    - /var/lib/oxidized/:/var/lib/oxidized/
 
