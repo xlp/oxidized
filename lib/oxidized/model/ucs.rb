@@ -15,6 +15,8 @@ class UCS < Oxidized::Model
   end
 
   cmd 'show configuration all | no-more' do |cfg|
+    cfg.gsub! / !   enter backup.*\n*(?: [^\n]*\n*)*? .*exit/m, ''
+    cfg.gsub! / !   enter schedule exp-bkup-outdate*\n*(?: [^\n]*\n*)*? .*exit/m, ''
     cfg
   end
 
