@@ -107,7 +107,7 @@ class IOS < Oxidized::Model
     cfg = cfg.each_line.to_a[3..-1]
     cfg = cfg.reject { |line| line.match /^ntp clock-period / }.join
     cfg.gsub! /^Current configuration : [^\n]*\n/, ''
-    cfg.gsub! /^! (Last configuration change).*/, '\\1 <configuration removed>'
+    cfg.gsub! /^(! Last configuration change).*/, '\\1 <configuration removed>'
     cfg.gsub! /^ tunnel mpls traffic-eng bandwidth[^\n]*\n*(
                   (?: [^\n]*\n*)*
                   tunnel mpls traffic-eng auto-bw)/mx, '\1'
