@@ -1,0 +1,29 @@
+stages:
+- build
+- release
+
+variables:
+  CONTAINER_TEST_IMAGE: gitlab.eternalnet.ch:4567/eternalnet/oxidized_src:$CI_BUILD_REF_NAME
+  CONTAINER_RELEASE_IMAGE: docker.eternalnet.ch/oxidized:latest
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab.eternalnet.ch:4567
+
+build:
+  only:
+    - master
+  stage: build
+  script:
+    - docker build --pull -t $CONTAINER_TEST_IMAGE .
+    - docker push $CONTAINER_TEST_IMAGE
+
+release-image:
+  stage: release
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+  only:
+    - master
+
