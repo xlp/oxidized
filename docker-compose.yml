@@ -2,7 +2,8 @@
 # docker-compose file example for oxidized that will start along with docker daemon
 oxidized:
   restart: always
-  image: oxidized/oxidized:latest 
+#  image: oxidized/oxidized:latest 
+  image: docker.eternalnet.ch/oxidized
   #build: ./
   ports:
     - 8888:8888/tcp
@@ -11,6 +12,6 @@ oxidized:
   volumes:
     - /etc/oxidized:/root/.config/oxidized 
     - /home/eternalnet/.ssh:/root/.ssh
-    - /var/www/CONFIG:/root/edoc
+#    - /var/www/CONFIG:/root/edoc
     - /var/lib/oxidized/:/var/lib/oxidized/
 
