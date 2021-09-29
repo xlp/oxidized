@@ -15,7 +15,7 @@ build:
     - master
   stage: build
   script:
-    - docker build --pull -t $CONTAINER_TEST_IMAGE .
+    - docker build --no-cache --pull -t $CONTAINER_TEST_IMAGE .
     - docker push $CONTAINER_TEST_IMAGE
 
 release-image:
