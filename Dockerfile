@@ -27,6 +27,7 @@ WORKDIR /tmp/oxidized
 
 # docker automated build gets shallow copy, but non-shallow copy cannot be unshallowed
 RUN git fetch --unshallow || true
+RUN cat lib/oxidized/version.rb
 RUN rake install
 
 # web interface
