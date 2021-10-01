@@ -25,7 +25,6 @@ RUN gem install ed25519 -v '>= 1.2, < 1.3'
 COPY . /tmp/oxidized/
 WORKDIR /tmp/oxidized
 
-RUN grep -R '0\.8\.1' /tmp/oxidized
 # docker automated build gets shallow copy, but non-shallow copy cannot be unshallowed
 RUN git fetch --unshallow || true
 RUN cat lib/oxidized/version.rb
