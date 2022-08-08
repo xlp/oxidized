@@ -22,7 +22,7 @@ class Aireos < Oxidized::Model
     cfg << "\n"
   end
 
-  cmd 'show run-config commands' do |cfg|
+  cmd 'show run-config startup-commands' do |cfg|
     clean cfg
   end
 
