@@ -17,8 +17,8 @@ RUN gem install gpgme sequel sqlite3 mysql2 pg --no-document
 RUN gem install net-tftp net-http-persistent mechanize --no-document
 
 # dependencies for ssh-keys
-RUN gem install rbnacl -v '<5.0' --no-ri --no-rdoc
-RUN gem install bcrypt_pbkdf -v '<2.0' --no-ri --no-rdoc
+RUN gem install rbnacl -v '<5.0' --no-rdoc
+RUN gem install bcrypt_pbkdf -v '<2.0' --no-rdoc
 RUN gem install ed25519 -v '>= 1.2, < 1.3'
 
 # build and install oxidized
