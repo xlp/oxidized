@@ -48,6 +48,7 @@
   * [AXOS](/lib/oxidized/model/axos.rb)
 * Cambium
   * [Cambium (PMP450 Series)](/lib/oxidized/model/cambium.rb)
+  * [Cambium (ePMP Series)](/lib/oxidized/model/cambiumepmp.rb)
 * Casa
   * [Casa](/lib/oxidized/model/casa.rb)
 * Centec Networks
@@ -151,6 +152,10 @@
   * [ScreenOS (Netscreen)](/lib/oxidized/model/screenos.rb)
 * LANCOM Systems GmbH
   * [LCOS](/lib/oxidized/model/lancom.rb)
+* Lenovo
+  * [Lenovo Network OS](/lib/oxidized/model/lenovonos.rb)
+* Linkys
+  * [SRW](/lib/oxidized/model/linksyssrw.rb)
 * Linuxgeneric
   * [CentOS](/lib/oxidized/model/linuxgeneric.rb)
 * Mellanox
@@ -163,6 +168,8 @@
 * MRV
   * [MasterOS](/lib/oxidized/model/masteros.rb)
   * [FiberDriver](/lib/oxidized/model/fiberdriver.rb)
+* NEC
+  * [NEC IX](/lib/oxidized/model/necix.rb)
 * Netgear
   * [Netgear switches](/lib/oxidized/model/netgear.rb)
 * Netonix
@@ -226,6 +233,8 @@
   * [Fireware OS](/lib/oxidized/model/firewareos.rb)
 * Westell
   * [Westell 8178G, Westell 8266G](/lib/oxidized/model/weos.rb)
+* YAMAHA
+  * [YAMAHA NVR/RTX Series](/lib/oxidized/model/yamaha.rb)
 * Zhone
   * [Zhone (OLT and MX)](/lib/oxidized/model/zhoneolt.rb)
 * ZTE
@@ -234,3 +243,4 @@
   * [ZyNOS](/lib/oxidized/model/zynos.rb)
   * [ZyNOS GS-series variant](/lib/oxidized/model/zynosgs.rb)
   * [NDMS](/lib/oxidized/model/ndms.rb)
+  * [1308](/lib/oxidized/model/zy1308.rb)
