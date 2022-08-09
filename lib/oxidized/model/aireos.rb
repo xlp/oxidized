@@ -54,6 +54,11 @@ class Aireos < Oxidized::Model
       next if line =~ /.*Blocked: Configuration is blocked.*$/
       next if line[0] == "#"
       next if line[0] == "!"
+
+      line = line[1..-1] if line[0] == "\r"
+      out << line.strip
     end
-  end 
+    out = out.join "\n"
+    out << "\n"
+  end
 end
