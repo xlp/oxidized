@@ -112,6 +112,7 @@ class IOS < Oxidized::Model
       cfg = cfg.each_line.to_a[3..-1]
       cfg = cfg.reject { |line| line.match /^ntp clock-period / }.join
       cfg = cfg.each_line.reject { |line| line.match /^! (Last|No) configuration change (at|since).*/ unless line =~ /\d+\sby\s\S+$/ }.join
+      cfg = cfg.each_line.reject { |line| line.match /^! NVRAM config last updated .*/ unless line.match /\d+\sby\s\S+$/ }.join
       cfg.gsub! /^Current configuration : [^\n]*\n/, ''
       cfg.gsub! /^ tunnel mpls traffic-eng bandwidth[^\n]*\n*(
                     (?: [^\n]*\n*)*
