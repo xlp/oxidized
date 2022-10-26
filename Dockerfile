@@ -31,7 +31,12 @@ RUN cat lib/oxidized/version.rb
 RUN rake install
 
 # web interface
-RUN gem install oxidized-web --no-document
+RUN mkdir /tmp/web
+WORKDIR /tmp/web
+RUN git clone https://github.com/ytti/oxidized-web.git .
+RUN rake build
+RUN gem install pkg/oxidized-web*.gem
+#RUN gem install oxidized-web --no-document
 
 # clean up
 WORKDIR /
