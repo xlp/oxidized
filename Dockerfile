@@ -1,5 +1,12 @@
+FROM phusion/baseimage:focal-1.2.0 AS web-builder
+
+RUN mkdir /oxidized-web
+WORKDIR /oxidized-web
+RUN git clone https://github.com/ytti/oxidized-web.git .
+RUN rake build
+
 # Single-stage build of an oxidized container from phusion/baseimage-docker focal-1.2.0, derived from Ubuntu 20.04 (Focal Fossa)
-FROM phusion/baseimage:focal-1.2.0
+FROM phusion/baseimage:focal-1.2.0 
 
 # set up dependencies for the build process
 RUN apt-get -yq update \
@@ -31,12 +38,9 @@ RUN cat lib/oxidized/version.rb
 RUN rake install
 
 # web interface
-RUN mkdir /tmp/web
-WORKDIR /tmp/web
-RUN git clone https://github.com/ytti/oxidized-web.git .
-RUN rake build
-RUN gem install pkg/oxidized-web*.gem
 #RUN gem install oxidized-web --no-document
+COPY --from=web-builder /oxidized-web/pkg/oxidized-web*.gem ./
+RUN gem install ./oxidized-web*.gem
 
 # clean up
 WORKDIR /
