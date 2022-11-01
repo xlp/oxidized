@@ -1,4 +1,4 @@
-FROM phusion/baseimage:focal-1.2.0 AS web-builder
+FROM ruby:latest AS web-builder
 
 RUN mkdir /oxidized-web
 WORKDIR /oxidized-web
