@@ -6,9 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- model for TrueNAS devices (@neilschelly)
+- model for Acme Packet devices (@ha36d)
 - Cumulus: added option to use NCLU as ia collecting method
 - Update net-ssh to 7.0.0.beta1 (using `append_all_supported_algorithms: true`)
 - Allow (config) (vlan-####) confirmation (y/n) and sftp questions in procurve prompt (@sorano)
+- fix: allow Netgear devices to finish SSH session correctly
+- More pager handling for MIS5030Q (@glance-)
+- Update logrotate example to allow logrotate service to start before any logs exist
+- Mask NX-OS tacacs+ host keys (@0x4c6565)
 
 ### Added
 
@@ -31,6 +37,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - new option: use_max_threads
 - model for ADVA devices (@stephrdev)
 - model for YAMAHA NVR/RTX Series (@bluekirin55)
+- model for ZPE Nodegrid OS (@euph333)
+- model for H3C switches
+- extended mysql source configuration to include tls options (@glaubway)
+- updated rugged in gemspec for ruby 3.0 support (@firefishy)
 
 ### Changed
 
@@ -52,6 +62,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - xmppdiff now persists its connection to the XMPP server and MUC (@jplitza)
 - routeros no longer backups infos on available updates (@jplitza)
 - avoid /humidity hardware field in tmos (F5) to be reported (@albsga)
+- read all configurations in partition folder for tmos (F5) (@dalamanster)
 - version information or OPNsense and PFsense models is now included as XML comments (@pv2b)
 - netscaler, backup all partitions (@smallsam)
 - only runs SSH proxy commands if the ssh_proxy configuration item has been defined (@jameskirsop)
@@ -67,6 +78,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - comware: support for enable(super) login password added (@delvta)
 - use slack-ruby-client instead of slack-api for slackdiff hook (@0xmc)
 - ios: Add support for RBAC in IOS model (@jameskirsop)
+- hide unsupported-transceiver license key in Arista EOS (@davidc)
 
 ### Fixed
 
@@ -90,8 +102,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Updated fastiron enable password prompt regex (@pepperoni-pi)
 - fixed an issue where the pfsense model would not report errors in case it was unable to download the configuration e.g. due to insufficient permissions
 - added a missing check for whether to send `enable` commands to Adtran devices (@repnop)
+- fixed an issue where ADVA devices with a configured prompt != `ADVA-->` couldn't be polled (@momorientes)
 - ensure local time and system up time are filtered for ADVA devices (@stephrdev)
 - fixed an issue with FortiOS that didn't accurately match `set ca` lines #2567 (@neilschelly)
+- removed unwanted current date from slxos model
+- fixed secret handling for rip authentication in casa model #2648 (@grahamjohnston)
 
 ## [0.28.0 - 2020-05-18]
 
