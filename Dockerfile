@@ -10,12 +10,12 @@ FROM phusion/baseimage:focal-1.2.0
 
 # set up dependencies for the build process
 RUN apt-get -yq update \
-    && apt-get -yq --no-install-recommends install ruby ruby-dev libssl1.1 libssl-dev pkg-config make cmake libssh2-1 libssh2-1-dev git git-email libmailtools-perl g++ libffi-dev ruby-bundler libicu66 libicu-dev libsqlite3-0 libsqlite3-dev libmysqlclient21 libmysqlclient-dev libpq5 libpq-dev zlib1g-dev \
+    && apt-get -yq --no-install-recommends install ruby ruby-dev libssl1.1 libssl-dev pkg-config make cmake libssh2-1 libssh2-1-dev git git-email libmailtools-perl g++ libffi-dev ruby-bundler libicu66 libicu-dev libsqlite3-0 libsqlite3-dev libmysqlclient21 libmysqlclient-dev libpq5 libpq-dev zlib1g zlib1g-dev libgit2-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # dependencies for hooks
-RUN gem install aws-sdk slack-ruby-client xmpp4r cisco_spark --no-document
+RUN gem install aws-sdk slack-ruby-client xmpp4r cisco_spark rugged --no-document
 
 # dependencies for sources
 RUN gem install gpgme sequel sqlite3 mysql2 pg --no-document

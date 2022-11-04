@@ -14,6 +14,10 @@ class UCS < Oxidized::Model
     comment cfg
   end
 
+  cmd 'show server inventory expand detail' do |cfg|
+    comment cfg
+  end
+
   cmd 'show configuration all | no-more' do |cfg|
     cfg.gsub! /^ !   enter backup.*?exit/m, ''
     cfg.gsub! /^     enter schedule exp-bkup-outdate.*?exit/m, ''
