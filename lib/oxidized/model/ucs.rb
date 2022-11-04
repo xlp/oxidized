@@ -14,7 +14,7 @@ class UCS < Oxidized::Model
     comment cfg
   end
 
-  cmd 'show server inventory expand detail' do |cfg|
+  cmd 'show server inventory expand detail | no-more' do |cfg|
     comment cfg
   end
 
