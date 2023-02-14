@@ -1,5 +1,5 @@
 # Oxidized
-[![Build Status](https://api.travis-ci.com/ytti/oxidized.svg)](https://travis-ci.com/ytti/oxidized)
+[![Build Status](https://github.com/ytti/oxidized/actions/workflows/ruby.yml/badge.svg)](https://github.com/ytti/oxidized/actions/workflows/ruby.yml)
 [![codecov.io](https://codecov.io/gh/ytti/oxidized/coverage.svg?branch=master)](https://codecov.io/gh/ytti/oxidized?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/5a90cb22db6a4d5ea23ad0dfb53fe03a)](https://www.codacy.com/app/ytti/oxidized?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ytti/oxidized&amp;utm_campaign=Badge_Grade)
 [![Code Climate](https://codeclimate.com/github/ytti/oxidized/badges/gpa.svg)](https://codeclimate.com/github/ytti/oxidized)
@@ -196,7 +196,7 @@ Run the container for the first time to initialize the config:
 _Note: this step in only required for creating the Oxidized configuration file and can be skipped if you already have one._
 
 ```shell
-docker run --rm -v /etc/oxidized:/root/.config/oxidized -p 8888:8888/tcp -t oxidized/oxidized:latest oxidized
+docker run --rm -v /etc/oxidized:/home/oxidized/.config/oxidized -p 8888:8888/tcp -t oxidized/oxidized:latest oxidized
 ```
 
 If the RESTful API and Web Interface are enabled, on the docker host running the container
@@ -218,11 +218,11 @@ services:
     environment:
       CONFIG_RELOAD_INTERVAL: 600
     volumes:
-       - config:/root/.config/oxidized/config
-       - router.db:/root/.config/oxidized/router.db
-       - model:/root/.config/oxidized/model
+       - config:/home/oxidized/.config/oxidized/config
+       - router.db:/home/oxidized/.config/oxidized/router.db
+       - model:/home/oxidized/.config/oxidized/model
        # if git is use as input
-       - data:/root/.config/oxidized/backupcfg/
+       - data:/home/oxidized/.config/oxidized/backupcfg/
 
 ```
 
@@ -235,7 +235,7 @@ vim /etc/oxidized/router.db
 Run container again to start oxidized with your configuration:
 
 ```shell
-docker run -v /etc/oxidized:/root/.config/oxidized -p 8888:8888/tcp -t oxidized/oxidized:latest
+docker run -v /etc/oxidized:/home/oxidized/.config/oxidized -p 8888:8888/tcp -t oxidized/oxidized:latest
 oxidized[1]: Oxidized starting, running as pid 1
 oxidized[1]: Loaded 1 nodes
 Puma 2.13.4 starting...
@@ -247,13 +247,13 @@ Puma 2.13.4 starting...
 If you want to have the config automatically reloaded (e.g. when using a http source that changes):
 
 ```shell
-docker run -v /etc/oxidized:/root/.config/oxidized -p 8888:8888/tcp -e CONFIG_RELOAD_INTERVAL=3600 -t oxidized/oxidized:latest
+docker run -v /etc/oxidized:/home/oxidized/.config/oxidized -p 8888:8888/tcp -e CONFIG_RELOAD_INTERVAL=3600 -t oxidized/oxidized:latest
 ```
 
 If you need to use an internal CA (e.g. to connect to an private github instance):
 
 ```shell
-docker run -v /etc/oxidized:/root/.config/oxidized -v /path/to/MY-CA.crt:/usr/local/share/ca-certificates/MY-CA.crt -p 8888:8888/tcp -e UPDATE_CA_CERTIFICATES=true -t oxidized/oxidized:latest
+docker run -v /etc/oxidized:/home/oxidized/.config/oxidized -v /path/to/MY-CA.crt:/usr/local/share/ca-certificates/MY-CA.crt -p 8888:8888/tcp -e UPDATE_CA_CERTIFICATES=true -t oxidized/oxidized:latest
 ```
 
 ### Installing Ruby 2.3 using RVM
