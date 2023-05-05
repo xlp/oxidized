@@ -1,7 +1,7 @@
 module Oxidized
-  class HTTP < Source
+  class SourceHTTP < Source
     def initialize
-      @cfg = Oxidized.config.source.http
+      @cfg = Oxidized.config.source.sourcehttp
       super
     end
 
